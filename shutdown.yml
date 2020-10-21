@@ -6,4 +6,6 @@
 
   tasks:
   - name: Shutdown all nodes
-    shell: "sudo shutdown now"
+    shell: sleep 2 && /sbin/shutdown -h now
+    async: 1
+    poll: 0
