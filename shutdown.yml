@@ -1,8 +1,9 @@
 ---
-- name: Shutdown KLAP
+- name: SHUTDOWN KLAP
   hosts: all
   become: yes
   gather_facts: false
+
   tasks:
   - name: Shutdown all nodes
     shell: "sudo shutdown now"
