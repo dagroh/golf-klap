@@ -3,9 +3,19 @@
   hosts: all
   become: yes
   gather_facts: false
+  vars_files:
+    - vars/vars.yml
 
   tasks:
   - name: Shutdown all nodes
     shell: sleep 2 && /sbin/shutdown -h now
     async: 1
     poll: 0
+
+  - name: Verify nodes are unreachable
+    local_action: shell ping -q -c 1 -W 1 {{ item.hostname }}
+    register: ping
+    retries: 5
+    until: "'100% packet loss' in ping.stdout"
+    failed_when: "'100% packet loss' not in ping.stdout"
+    loop: "{{ cluster_hosts }}"
